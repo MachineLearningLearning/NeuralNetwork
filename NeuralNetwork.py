@@ -18,6 +18,10 @@ class NeuralNetwork:
         self.layers = layers
 
         # generate weights and biases
+        # weights as list of two dimensional numpy arrays
+        self.weights = []
+        # biases as list of one dimensional numpy arrays
+        self.biases = []
 
     def feed_forward(self, inputs):
         """
@@ -26,8 +30,10 @@ class NeuralNetwork:
         :param inputs: numpy array of values for the input layer nodes
         :return: list of values each representing one output from an output node
         """
-        # I (Mark Jacobsen) will work on this...
-        return
+        for b, w in zip(self.biases, self.weights):
+            inputs = np.dot(w, inputs) + b
+            inputs = sigmoid(inputs)
+        return inputs
 
     def train(self, inputs, expected_ouputs):
         # someone claim this??
