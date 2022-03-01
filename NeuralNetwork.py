@@ -23,6 +23,17 @@ class NeuralNetwork:
         # biases as list of one dimensional numpy arrays
         self.biases = []
 
+    @staticmethod
+    def sigmoid(arr):
+        """
+        applies sigmoid function to all elements in np array
+        :param arr: the numpy array to apply sigmoid to
+        :return: np array
+        """
+        sigm = lambda x: 1 / (1 + np.exp(-x))
+        npfunc = np.vectorize(sigm)
+        return npfunc(arr)
+
     def feed_forward(self, inputs):
         """
         feed through the network and generate outputs
@@ -32,7 +43,7 @@ class NeuralNetwork:
         """
         for b, w in zip(self.biases, self.weights):
             inputs = np.dot(w, inputs) + b
-            inputs = sigmoid(inputs)
+            inputs = self.sigmoid(inputs)
         return inputs
 
     def train(self, inputs, expected_ouputs):
