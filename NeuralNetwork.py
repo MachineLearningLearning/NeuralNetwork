@@ -57,3 +57,9 @@ class NeuralNetwork:
     """
     other stuff...
     """
+
+if __name__ == "__main__":
+    network = NeuralNetwork([4, 3, 3, 2])
+    inputs = np.array([[1, 0, 0, 1]])
+    outputs = network.feed_forward(np.transpose(inputs))
+    print(outputs)
