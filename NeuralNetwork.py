@@ -19,9 +19,9 @@ class NeuralNetwork:
 
         # generate weights and biases
         # weights as list of two dimensional numpy arrays
-        self.weights = []
+        self.weights = [np.random.rand(layers[i + 1], layers[i]) for i in range(len(layers) - 1)]
         # biases as list of one dimensional numpy arrays
-        self.biases = []
+        self.biases = [np.random.rand(n, 1) for n in layers[1:]]
 
     @staticmethod
     def sigmoid(arr):
@@ -36,8 +36,8 @@ class NeuralNetwork:
 
     def feed_forward(self, inputs):
         """
-        feed through the network and generate outputs
-        for specific inputs
+        feed through the network and generate outputs for specific inputs
+        currently uses only the sigmoid activation function
         :param inputs: numpy array of values for the input layer nodes
         :return: list of values each representing one output from an output node
         """
