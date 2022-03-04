@@ -18,16 +18,33 @@ class NeuralNetwork:
         self.layers = layers
 
         # generate weights and biases
+        # weights as list of two dimensional numpy arrays
+        self.weights = [np.random.rand(layers[i + 1], layers[i]) for i in range(len(layers) - 1)]
+        # biases as list of one dimensional numpy arrays
+        self.biases = [np.random.rand(n, 1) for n in layers[1:]]
+
+    @staticmethod
+    def sigmoid(arr):
+        """
+        applies sigmoid function to all elements in np array
+        :param arr: the numpy array to apply sigmoid to
+        :return: np array
+        """
+        sigm = lambda x: 1 / (1 + np.exp(-x))
+        npfunc = np.vectorize(sigm)
+        return npfunc(arr)
 
     def feed_forward(self, inputs):
         """
-        feed through the network and generate outputs
-        for specific inputs
+        feed through the network and generate outputs for specific inputs
+        currently uses only the sigmoid activation function
         :param inputs: numpy array of values for the input layer nodes
         :return: list of values each representing one output from an output node
         """
-        # I (Mark Jacobsen) will work on this...
-        return
+        for b, w in zip(self.biases, self.weights):
+            inputs = np.dot(w, inputs) + b
+            inputs = self.sigmoid(inputs)
+        return inputs
 
     def train(self, inputs, expected_ouputs):
         # someone claim this??
@@ -40,3 +57,9 @@ class NeuralNetwork:
     """
     other stuff...
     """
+
+if __name__ == "__main__":
+    network = NeuralNetwork([4, 3, 3, 2])
+    inputs = np.array([[1, 0, 0, 1]])
+    outputs = network.feed_forward(np.transpose(inputs))
+    print(outputs)
