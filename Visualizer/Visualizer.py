@@ -12,11 +12,13 @@ contributors: Mark Jacobsen, *add your name here...*
 """
 import pygame
 pygame.init()
+import NetworkVisualizer
 
 
 class Visualizer:
     def __init__(self, network):
         self.network = network
+        self.network_visualizer = NetworkVisualizer.NetworkVisualizer(network)
         # pygame setup
         self.screen = pygame.display.set_mode([800, 800])
         self.running = False
@@ -36,6 +38,8 @@ class Visualizer:
         """
         # background
         self.screen.fill((255, 255, 255))
+        # network
+        self.network_visualizer.draw(self.screen)
         # flip display
         pygame.display.flip()
 
@@ -51,5 +55,8 @@ class Visualizer:
 
 # test
 if __name__ == "__main__":
-    vis = Visualizer(None)
+    class nn:
+        def __init__(self, layers) -> None:
+            self.layers = layers
+    vis = Visualizer(nn([4, 2, 2, 1]))
     vis.run()

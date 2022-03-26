@@ -24,10 +24,10 @@ class NetworkVisualizer:
         :return: list of lists for each layer in network
         """
         nodes = []
-        for layer in self.network.layer:
+        for layer in self.network.layers:
             node_layer = []
             for _ in range(layer):
-                n = Node(10, 10, 10)
+                n = Node.Node(10, 10, 10)
                 node_layer.append(n)
             nodes.append(node_layer)
         return nodes
