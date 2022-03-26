@@ -3,6 +3,7 @@ This file contains the Visualizer class
 
 The Visualizer class is used to visualize a NeuralNetwork object.
 It uses pygame for the graphics.
+This file is mainly for the pygame setup and to link everything together.
 
 Parameters:
     network: the NeuralNetwork object to visualize
