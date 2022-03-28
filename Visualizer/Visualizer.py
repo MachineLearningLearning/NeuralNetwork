@@ -20,6 +20,7 @@ class Visualizer:
         # pygame setup
         self.screen = pygame.display.set_mode([800, 800])
         self.running = False
+        self.clock = pygame.time.Clock()
         # other setup
         self.network = network
         self.network_visualizer = NetworkVisualizer.NetworkVisualizer(network, self.screen)
@@ -30,6 +31,7 @@ class Visualizer:
         """
         self.running = True
         while self.running:
+            self.clock.tick(30)
             self.handle_events()
             self.draw()
 
