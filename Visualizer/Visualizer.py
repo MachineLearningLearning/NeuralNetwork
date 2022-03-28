@@ -17,11 +17,12 @@ import NetworkVisualizer
 
 class Visualizer:
     def __init__(self, network):
-        self.network = network
-        self.network_visualizer = NetworkVisualizer.NetworkVisualizer(network)
         # pygame setup
         self.screen = pygame.display.set_mode([800, 800])
         self.running = False
+        # other setup
+        self.network = network
+        self.network_visualizer = NetworkVisualizer.NetworkVisualizer(network, self.screen)
 
     def run(self):
         """
@@ -39,7 +40,7 @@ class Visualizer:
         # background
         self.screen.fill((255, 255, 255))
         # network
-        self.network_visualizer.draw(self.screen)
+        self.network_visualizer.draw()
         # flip display
         pygame.display.flip()
 
@@ -58,5 +59,5 @@ if __name__ == "__main__":
     class nn:
         def __init__(self, layers) -> None:
             self.layers = layers
-    vis = Visualizer(nn([4, 2, 2, 1]))
+    vis = Visualizer(nn([5, 2, 2, 1]))
     vis.run()
