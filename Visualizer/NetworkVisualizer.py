@@ -35,7 +35,7 @@ class NetworkVisualizer:
         nodes = []
         current_x = x_distance / 2
         for layer in self.network.layers:
-            current_y = y_distance / 2
+            current_y = (height - (layer - 1) * y_distance) / 2
             node_layer = []
             for _ in range(layer):
                 n = Node.Node(current_x, current_y, self.node_radius, self.screen)
