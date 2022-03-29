@@ -7,10 +7,10 @@ Parameters:
 *Further explanation of class etc.*
 *Also feel free to change the parameters if you think its better in some other way*
 
-contributors: Mark Jacobsen, *add your name here...*
+contributors: Mark Jacobsen, Will Gould, *add your name here...*
 """
 import numpy as np
-
+import random
 
 class NeuralNetwork:
     def __init__(self, layers):
@@ -20,8 +20,10 @@ class NeuralNetwork:
         # generate weights and biases
         # weights as list of two dimensional numpy arrays
         self.weights = [np.random.rand(layers[i + 1], layers[i]) for i in range(len(layers) - 1)]
+
         # biases as list of one dimensional numpy arrays
         self.biases = [np.random.rand(n, 1) for n in layers[1:]]
+
 
     @staticmethod
     def sigmoid(arr):
@@ -39,27 +41,69 @@ class NeuralNetwork:
         feed through the network and generate outputs for specific inputs
         currently uses only the sigmoid activation function
         :param inputs: numpy array of values for the input layer nodes
-        :return: list of values each representing one output from an output node
+        :return: 2D list of numpy arrays of values each representing the values in each layer
         """
+        outputs = []
         for b, w in zip(self.biases, self.weights):
             inputs = np.dot(w, inputs) + b
             inputs = self.sigmoid(inputs)
-        return inputs
+            outputs.append(inputs)
+        return outputs
 
-    def train(self, inputs, expected_ouputs):
-        # someone claim this??
-        return
+    def train(self, inputs, expected_outputs, learning_rate):
+        """
+        :param inputs: numpy array of values for the input layer nodes
+        :param expected_outputs: numpy array of values that are what the output layer nodes should be
+        :param learning_rate: how much the neural network changes its weights and biases in each training cycle
+        """
 
-    def backpropagation(self):
-        # someone claim this??
-        return
+        network_values = self.feed_forward(np.transpose(inputs))
+        '''
+        errors where [0] is output of the nn and [-1] is first hidden layer
+        gradients where [0] is output of nn and [-1] is first hidden layer
+        '''
+        node_errors, node_gradients = self.backpropagation(network_values, expected_outputs)
+
+        for i in range(0, len(node_errors) - 1):
+            delta_bias = learning_rate * node_errors[i] * node_gradients[i]
+            delta_weights = np.dot(delta_bias, np.transpose(network_values[-2 - i]))
+
+            self.biases[-i - 1] = self.biases[-i - 1] + delta_bias
+            self.weights[-i - 1] = self.weights[-i - 1] + delta_weights
+
+        #last to change is the weights from the input nodes to the first hidden layer
+        delta_bias = learning_rate * node_errors[-1] * node_gradients[-1]
+        delta_weights = np.dot(delta_bias, inputs)
+
+        self.biases[0] = self.biases[0] + delta_bias
+        self.weights[0] = self.weights[0] + delta_weights  
+
+    def backpropagation(self, network_values, expected_outputs):
+        errors = [np.transpose(np.subtract(expected_outputs, np.transpose(network_values[-1])))]
+        gradients = [[output * (1 - output) for output in network_values[-1]]]
+
+        for i in range(len(network_values) - 1, 0, -1):
+            errors.append(np.dot(np.transpose(self.weights[i]), errors[-1]))
+            gradients.append([value * (1 - value) for value in network_values[i - 1]])
+
+
+        return errors, gradients
 
     """
     other stuff...
     """
 
 if __name__ == "__main__":
-    network = NeuralNetwork([4, 3, 3, 2])
-    inputs = np.array([[1, 0, 0, 1]])
-    outputs = network.feed_forward(np.transpose(inputs))
-    print(outputs)
+    network = NeuralNetwork([2, 2, 1])
+    print(network.feed_forward(np.transpose(np.array([[0, 0]])))[-1])
+    print(network.feed_forward(np.transpose(np.array([[1, 0]])))[-1])
+    print(network.feed_forward(np.transpose(np.array([[0, 1]])))[-1])
+    print(network.feed_forward(np.transpose(np.array([[1, 1]])))[-1])
+    inputs = [[[[1, 0]], [1]], [[[0, 1]], [1]], [[[1, 1]], [1]], [[[0, 0]], [0]]]
+    for i in range(0, 10000):
+        test_data = inputs[random.randint(0, 3)]
+        network.train(np.array(test_data[0]), np.array(test_data[1]), 0.1)
+    print(network.feed_forward(np.transpose(np.array([[0, 0]])))[-1])
+    print(network.feed_forward(np.transpose(np.array([[1, 0]])))[-1])
+    print(network.feed_forward(np.transpose(np.array([[0, 1]])))[-1])
+    print(network.feed_forward(np.transpose(np.array([[1, 1]])))[-1])
