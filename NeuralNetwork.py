@@ -21,11 +21,21 @@ def sigmoid(x):
     """
     return 1 / (1 + np.exp(-x))
 
+@np.vectorize
+def sigmoid_prime(x):
+    """
+    applies the derivative of sigmoid to all elements in the input np array
+    :param x:
+    :return:
+    """
+    return x * (1 - x)
+
 class NeuralNetwork:
-    def __init__(self, layers, activation=sigmoid):
+    def __init__(self, layers, activation=sigmoid, activation_prime=sigmoid_prime):
         # setup
         self.layers = layers
         self.activation = activation
+        self.activation_prime = activation_prime
 
         # generate weights and biases
         # weights as list of two dimensional numpy arrays
@@ -77,7 +87,7 @@ class NeuralNetwork:
 
     def backpropagation(self, network_values, expected_outputs):
         errors = [np.transpose(np.subtract(expected_outputs, np.transpose(network_values[-1])))]
-        gradients = [[output * (1 - output) for output in network_values[-1]]]
+        gradients = [self.activation_prime(network_values[-1])]
 
         for i in range(len(network_values) - 1, 0, -1):
             errors.append(np.dot(np.transpose(self.weights[i]), errors[-1]))
