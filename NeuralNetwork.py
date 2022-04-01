@@ -30,6 +30,16 @@ def sigmoid_prime(x):
     """
     return x * (1 - x)
 
+def relu(x):
+    return np.maximum(0, x)
+
+@np.vectorize
+def relu_prime(x):
+    if x > 0:
+        return 1
+    else:
+        return 0
+
 class NeuralNetwork:
     def __init__(self, layers, activation=sigmoid, activation_prime=sigmoid_prime):
         # setup
@@ -91,8 +101,7 @@ class NeuralNetwork:
 
         for i in range(len(network_values) - 1, 0, -1):
             errors.append(np.dot(np.transpose(self.weights[i]), errors[-1]))
-            gradients.append([value * (1 - value) for value in network_values[i - 1]])
-
+            gradients.append(self.activation_prime(network_values[i - 1]))
 
         return errors, gradients
 
