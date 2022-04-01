@@ -7,15 +7,25 @@ Parameters:
 *Further explanation of class etc.*
 *Also feel free to change the parameters if you think its better in some other way*
 
-contributors: Mark Jacobsen, Will Gould, *add your name here...*
+contributors: Mark Jacobsen, Will Gould, Abhinav Bhandari
 """
 import numpy as np
 import random
 
+@np.vectorize
+def sigmoid(x):
+    """
+    applies sigmoid function to all elements in np array
+    :param x: the numpy array to apply sigmoid to
+    :return: np array
+    """
+    return 1 / (1 + np.exp(-x))
+
 class NeuralNetwork:
-    def __init__(self, layers):
+    def __init__(self, layers, activation=sigmoid):
         # setup
         self.layers = layers
+        self.activation = activation
 
         # generate weights and biases
         # weights as list of two dimensional numpy arrays
@@ -24,29 +34,16 @@ class NeuralNetwork:
         # biases as list of one dimensional numpy arrays
         self.biases = [np.random.rand(n, 1) for n in layers[1:]]
 
-
-    @staticmethod
-    def sigmoid(arr):
-        """
-        applies sigmoid function to all elements in np array
-        :param arr: the numpy array to apply sigmoid to
-        :return: np array
-        """
-        sigm = lambda x: 1 / (1 + np.exp(-x))
-        npfunc = np.vectorize(sigm)
-        return npfunc(arr)
-
     def feed_forward(self, inputs):
         """
         feed through the network and generate outputs for specific inputs
-        currently uses only the sigmoid activation function
         :param inputs: numpy array of values for the input layer nodes
         :return: 2D list of numpy arrays of values each representing the values in each layer
         """
         outputs = []
         for b, w in zip(self.biases, self.weights):
             inputs = np.dot(w, inputs) + b
-            inputs = self.sigmoid(inputs)
+            inputs = self.activation(inputs)
             outputs.append(inputs)
         return outputs
 
