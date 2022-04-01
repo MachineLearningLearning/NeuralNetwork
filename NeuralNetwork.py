@@ -93,7 +93,7 @@ class NeuralNetwork:
     other stuff...
     """
 
-if __name__ == "__main__":
+def main():
     network = NeuralNetwork([2, 2, 1])
     print(network.feed_forward(np.transpose(np.array([[0, 0]])))[-1])
     print(network.feed_forward(np.transpose(np.array([[1, 0]])))[-1])
@@ -101,9 +101,12 @@ if __name__ == "__main__":
     print(network.feed_forward(np.transpose(np.array([[1, 1]])))[-1])
     inputs = [[[[1, 0]], [1]], [[[0, 1]], [1]], [[[1, 1]], [1]], [[[0, 0]], [0]]]
     for i in range(0, 10000):
-        test_data = inputs[random.randint(0, 3)]
+        test_data = random.choice(inputs)
         network.train(np.array(test_data[0]), np.array(test_data[1]), 0.1)
     print(network.feed_forward(np.transpose(np.array([[0, 0]])))[-1])
     print(network.feed_forward(np.transpose(np.array([[1, 0]])))[-1])
     print(network.feed_forward(np.transpose(np.array([[0, 1]])))[-1])
     print(network.feed_forward(np.transpose(np.array([[1, 1]])))[-1])
+
+if __name__ == "__main__":
+    main()
