@@ -7,7 +7,7 @@ Parameters:
 *Further explanation of class etc.*
 *Also feel free to change the parameters if you think its better in some other way*
 
-contributors: Mark Jacobsen, Will Gould, Abhinav Bhandari
+contributors: Mark Jacobsen, Will Gould, Abhinav Bhandari, Andrew Li
 """
 import numpy as np
 import random
@@ -39,6 +39,13 @@ def relu_prime(x):
         return 1
     else:
         return 0
+    
+def tanh(x):
+    return np.tanh(x)
+
+def dertanh(x):
+    #derivative of tanh
+    return 1-((tanh(x))^2)
 
 class NeuralNetwork:
     def __init__(self, layers, activation=sigmoid, activation_prime=sigmoid_prime):
