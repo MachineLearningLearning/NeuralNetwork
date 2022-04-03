@@ -53,12 +53,14 @@ class NetworkVisualizer:
         """
         weights = []
         for c, layer in enumerate(self.nodes[:-1]):
+            weight_layer = []
             # loop through nodes of current layer
             for node in layer:
                 # loop through nodes in next layer
                 for node2 in self.nodes[c + 1]:
                     weight = Weight.Weight(node, node2, self.screen)
-                    weights.append(weight)
+                    weight_layer.append(weight)
+            weights.append(weight_layer)
         return weights
 
     def draw(self):
@@ -72,5 +74,6 @@ class NetworkVisualizer:
             for n in layer:
                 n.draw()
         # draw the weights
-        for weight in self.weights:
-            weight.draw()
+        for weight_layer in self.weights:
+            for weight in weight_layer:
+                weight.draw()

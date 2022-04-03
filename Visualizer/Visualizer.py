@@ -13,6 +13,7 @@ contributors: Mark Jacobsen, *add your name here...*
 import pygame
 pygame.init()
 import NetworkVisualizer
+import numpy as np
 
 
 class Visualizer:
@@ -61,5 +62,10 @@ if __name__ == "__main__":
     class nn:
         def __init__(self, layers) -> None:
             self.layers = layers
+            # weights as list of two dimensional numpy arrays
+            self.weights = [np.random.rand(layers[i + 1], layers[i]) for i in range(len(layers) - 1)]
+
+            # biases as list of one dimensional numpy arrays
+            self.biases = [np.random.rand(n, 1) for n in layers[1:]]
     vis = Visualizer(nn([5, 2, 2, 1]))
     vis.run()
