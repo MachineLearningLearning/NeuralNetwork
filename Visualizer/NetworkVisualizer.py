@@ -10,8 +10,8 @@ Parameters:
 
 contributors: Mark Jacobsen, *add your name here...*
 """
-import Node
-import Weight
+from .Node import Node
+from .Weight import Weight
 
 
 class NetworkVisualizer:
@@ -58,7 +58,7 @@ class NetworkVisualizer:
             current_y = (height - (layer - 1) * y_distance) / 2
             node_layer = []
             for _ in range(layer):
-                n = Node.Node(current_x, current_y, self.node_radius, self.screen)
+                n = Node(current_x, current_y, self.node_radius, self.screen)
                 node_layer.append(n)
                 current_y += y_distance
             nodes.append(node_layer)
@@ -76,7 +76,7 @@ class NetworkVisualizer:
             for c2, node in enumerate(layer):
                 # loop through nodes in next layer
                 for c3, node2 in enumerate(self.nodes[c + 1]):
-                    weight = Weight.Weight(node, node2, self.screen)
+                    weight = Weight(node, node2, self.screen)
                     weight.weight = round(self.network.weights[c][c3][c2], 2)
                     weight_layer.append(weight)
             weights.append(weight_layer)
