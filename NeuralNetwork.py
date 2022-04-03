@@ -132,7 +132,7 @@ def main():
         test_data = random.choice(inputs)
         network.train(np.array(test_data[0]), np.array(test_data[1]), 0.1)
     vis.fun = fun
-    vis.max_iterations = 10000
+    vis.max_iterations = 1000
     vis.run()
 
     # print learned

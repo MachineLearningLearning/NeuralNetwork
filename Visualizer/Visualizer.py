@@ -70,28 +70,3 @@ class Visualizer:
             # window close
             if event.type == pygame.QUIT:
                 self.running = False
-    
-
-# test
-if __name__ == "__main__":
-    class nn:
-        def __init__(self, layers) -> None:
-            self.layers = layers
-            # weights as list of two dimensional numpy arrays
-            self.weights = self.generate_weights()
-
-            # biases as list of one dimensional numpy arrays
-            self.biases = [np.random.rand(n, 1) for n in layers[1:]]
-
-        def generate_weights(self):
-            return [np.random.rand(self.layers[i + 1], self.layers[i]) for i in range(len(self.layers) - 1)]
-
-    network = nn([5, 2, 2, 1])
-    vis = Visualizer(network)
-
-    def fun():
-        network.weights = network.generate_weights()
-        vis.network_visualizer.reset()
-
-    vis.fun = fun
-    vis.run()
