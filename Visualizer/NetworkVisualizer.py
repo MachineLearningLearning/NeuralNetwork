@@ -11,6 +11,7 @@ Parameters:
 contributors: Mark Jacobsen, *add your name here...*
 """
 import Node
+import Weight
 
 
 class NetworkVisualizer:
@@ -19,6 +20,7 @@ class NetworkVisualizer:
         self.screen = screen
         self.node_radius = 20
         self.nodes = self.create_nodes()
+        self.weights = self.create_weights()
 
     def create_nodes(self):
         """
@@ -45,6 +47,20 @@ class NetworkVisualizer:
             current_x += x_distance
         return nodes
 
+    def create_weights(self):
+        """
+        creates the weights of the network by considering the nodes
+        """
+        weights = []
+        for c, layer in enumerate(self.nodes[:-1]):
+            # loop through nodes of current layer
+            for node in layer:
+                # loop through nodes in next layer
+                for node2 in self.nodes[c + 1]:
+                    weight = Weight.Weight(node, node2, self.screen)
+                    weights.append(weight)
+        return weights
+
     def draw(self):
         """
         draw the network on the pygame screen
@@ -55,3 +71,6 @@ class NetworkVisualizer:
         for layer in self.nodes:
             for n in layer:
                 n.draw()
+        # draw the weights
+        for weight in self.weights:
+            weight.draw()
