@@ -5,7 +5,7 @@ import pygame
 
 class Weight:
     def __init__(self, Node1, Node2, screen):
-        self.weight = 0.89
+        self.weight = 0
         self.Node1 = Node1
         self.Node2 = Node2
         self.weight_pos = self.calculate_weight_pos()
