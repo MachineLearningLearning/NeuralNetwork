@@ -14,6 +14,7 @@ import pygame
 pygame.init()
 import NetworkVisualizer
 import numpy as np
+import time
 
 
 class Visualizer:
@@ -25,6 +26,7 @@ class Visualizer:
         # other setup
         self.network = network
         self.network_visualizer = NetworkVisualizer.NetworkVisualizer(network, self.screen)
+        self.fun = lambda: False
 
     def run(self):
         """
@@ -32,8 +34,12 @@ class Visualizer:
         """
         self.running = True
         while self.running:
+            # pygame stuff
             self.clock.tick(30)
             self.handle_events()
+            # user defined function
+            self.fun()
+            # draw
             self.draw()
 
     def draw(self):
@@ -63,9 +69,20 @@ if __name__ == "__main__":
         def __init__(self, layers) -> None:
             self.layers = layers
             # weights as list of two dimensional numpy arrays
-            self.weights = [np.random.rand(layers[i + 1], layers[i]) for i in range(len(layers) - 1)]
+            self.weights = self.generate_weights()
 
             # biases as list of one dimensional numpy arrays
             self.biases = [np.random.rand(n, 1) for n in layers[1:]]
-    vis = Visualizer(nn([5, 2, 2, 1]))
+
+        def generate_weights(self):
+            return [np.random.rand(self.layers[i + 1], self.layers[i]) for i in range(len(self.layers) - 1)]
+
+    network = nn([5, 2, 2, 1])
+    vis = Visualizer(network)
+
+    def fun():
+        network.weights = network.generate_weights()
+        vis.network_visualizer.reset()
+
+    vis.fun = fun
     vis.run()

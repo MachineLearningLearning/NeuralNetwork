@@ -22,6 +22,19 @@ class NetworkVisualizer:
         self.nodes = self.create_nodes()
         self.weights = self.create_weights()
 
+    def reset(self):
+        """
+        reset after weight change etc.
+        """
+        # reset weights
+        for c, layer in enumerate(self.nodes[:-1]):
+            # loop through nodes of current layer
+            for c2 in range(len(layer)):
+                # loop through nodes in next layer
+                for c3 in range(len(self.nodes[c + 1])):
+                    weight = self.weights[c][c2]
+                    weight.weight = round(self.network.weights[c][c3][c2], 2)
+
     def create_nodes(self):
         """
         create the nodes to draw based on the network structure
