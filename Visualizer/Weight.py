@@ -13,6 +13,9 @@ class Weight:
         self.font = pygame.font.SysFont('arial', 15)
         self.screen = screen
 
+    def __repr__(self):
+        return str(self.weight)
+
     def calculate_weight_pos(self):
         """
         calculate the position the weight value will be displayed at

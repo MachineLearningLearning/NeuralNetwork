@@ -27,13 +27,18 @@ class NetworkVisualizer:
         reset after weight change etc.
         """
         # reset weights
+        new_weights = []
         for c, layer in enumerate(self.nodes[:-1]):
+            new_weight_layer = []
             # loop through nodes of current layer
             for c2 in range(len(layer)):
                 # loop through nodes in next layer
                 for c3 in range(len(self.nodes[c + 1])):
-                    weight = self.weights[c][c2]
-                    weight.weight = round(self.network.weights[c][c3][c2], 2)
+                    new_weight_layer.append(round(self.network.weights[c][c3][c2], 2))
+            new_weights.append(new_weight_layer)
+        for l in range(len(new_weights)):
+            for w in range(len(new_weights[l])):
+                self.weights[l][w].weight = new_weights[l][w] 
 
     def create_nodes(self):
         """
