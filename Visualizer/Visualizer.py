@@ -12,7 +12,8 @@ contributors: Mark Jacobsen, *add your name here...*
 """
 import pygame
 pygame.init()
-import NetworkVisualizer
+from .NetworkVisualizer import NetworkVisualizer
+import numpy as np
 
 
 class Visualizer:
@@ -23,7 +24,10 @@ class Visualizer:
         self.clock = pygame.time.Clock()
         # other setup
         self.network = network
-        self.network_visualizer = NetworkVisualizer.NetworkVisualizer(network, self.screen)
+        self.network_visualizer = NetworkVisualizer(network, self.screen)
+        self.fun = lambda: False
+        self.max_iterations = 100000
+        self.current_iteration = 0
 
     def run(self):
         """
@@ -31,9 +35,21 @@ class Visualizer:
         """
         self.running = True
         while self.running:
+            # pygame stuff
             self.clock.tick(30)
             self.handle_events()
+            # user defined function
+            self.fun()
+            self.network_visualizer.reset()
+            # draw
             self.draw()
+            # end if max iterations
+            self.current_iteration += 1
+            if self.current_iteration == self.max_iterations:
+                self.running = False
+                break
+            if self.current_iteration % 1000 == 0:
+                print(f"current iteration: {self.current_iteration}")
 
     def draw(self):
         """
@@ -54,12 +70,3 @@ class Visualizer:
             # window close
             if event.type == pygame.QUIT:
                 self.running = False
-    
-
-# test
-if __name__ == "__main__":
-    class nn:
-        def __init__(self, layers) -> None:
-            self.layers = layers
-    vis = Visualizer(nn([5, 2, 2, 1]))
-    vis.run()

@@ -11,6 +11,8 @@ contributors: Mark Jacobsen, Will Gould, Abhinav Bhandari, Andrew Li
 """
 import numpy as np
 import random
+from Visualizer.Visualizer import Visualizer
+
 
 @np.vectorize
 def sigmoid(x):
@@ -123,9 +125,17 @@ def main():
     print(network.feed_forward(np.transpose(np.array([[0, 1]])))[-1])
     print(network.feed_forward(np.transpose(np.array([[1, 1]])))[-1])
     inputs = [[[[1, 0]], [1]], [[[0, 1]], [1]], [[[1, 1]], [1]], [[[0, 0]], [0]]]
-    for i in range(0, 10000):
+
+    # visualization
+    vis = Visualizer(network)
+    def fun():
         test_data = random.choice(inputs)
         network.train(np.array(test_data[0]), np.array(test_data[1]), 0.1)
+    vis.fun = fun
+    vis.max_iterations = 1000
+    vis.run()
+
+    # print learned
     print(network.feed_forward(np.transpose(np.array([[0, 0]])))[-1])
     print(network.feed_forward(np.transpose(np.array([[1, 0]])))[-1])
     print(network.feed_forward(np.transpose(np.array([[0, 1]])))[-1])

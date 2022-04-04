@@ -10,7 +10,8 @@ Parameters:
 
 contributors: Mark Jacobsen, *add your name here...*
 """
-import Node
+from .Node import Node
+from .Weight import Weight
 
 
 class NetworkVisualizer:
@@ -19,6 +20,25 @@ class NetworkVisualizer:
         self.screen = screen
         self.node_radius = 20
         self.nodes = self.create_nodes()
+        self.weights = self.create_weights()
+
+    def reset(self):
+        """
+        reset after weight change etc.
+        """
+        # reset weights
+        new_weights = []
+        for c, layer in enumerate(self.nodes[:-1]):
+            new_weight_layer = []
+            # loop through nodes of current layer
+            for c2 in range(len(layer)):
+                # loop through nodes in next layer
+                for c3 in range(len(self.nodes[c + 1])):
+                    new_weight_layer.append(round(self.network.weights[c][c3][c2], 2))
+            new_weights.append(new_weight_layer)
+        for l in range(len(new_weights)):
+            for w in range(len(new_weights[l])):
+                self.weights[l][w].weight = new_weights[l][w] 
 
     def create_nodes(self):
         """
@@ -38,12 +58,29 @@ class NetworkVisualizer:
             current_y = (height - (layer - 1) * y_distance) / 2
             node_layer = []
             for _ in range(layer):
-                n = Node.Node(current_x, current_y, self.node_radius, self.screen)
+                n = Node(current_x, current_y, self.node_radius, self.screen)
                 node_layer.append(n)
                 current_y += y_distance
             nodes.append(node_layer)
             current_x += x_distance
         return nodes
+
+    def create_weights(self):
+        """
+        creates the weights of the network by considering the nodes
+        """
+        weights = []
+        for c, layer in enumerate(self.nodes[:-1]):
+            weight_layer = []
+            # loop through nodes of current layer
+            for c2, node in enumerate(layer):
+                # loop through nodes in next layer
+                for c3, node2 in enumerate(self.nodes[c + 1]):
+                    weight = Weight(node, node2, self.screen)
+                    weight.weight = round(self.network.weights[c][c3][c2], 2)
+                    weight_layer.append(weight)
+            weights.append(weight_layer)
+        return weights
 
     def draw(self):
         """
@@ -55,3 +92,7 @@ class NetworkVisualizer:
         for layer in self.nodes:
             for n in layer:
                 n.draw()
+        # draw the weights
+        for weight_layer in self.weights:
+            for weight in weight_layer:
+                weight.draw()
