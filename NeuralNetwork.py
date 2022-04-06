@@ -49,6 +49,10 @@ def dertanh(x):
     #derivative of tanh
     return 1-((tanh(x))^2)
 
+def softmax(x):
+    ''' Compute softmax values for each sets of scores in x. '''
+    return np.exp(x) / np.sum(np.exp(x), axis=0)
+
 class NeuralNetwork:
     def __init__(self, layers, activation=sigmoid, activation_prime=sigmoid_prime):
         # setup
